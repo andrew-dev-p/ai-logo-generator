@@ -11,7 +11,7 @@ import { Card } from "@/components/ui/card";
 import { useSearchParams } from "next/navigation";
 import colors from "@/lib/colors";
 import logoDesigns from "@/lib/logo-designs";
-
+import PricingModel from "@/components/pricing-model";
 const Create = () => {
   const [step, setStep] = useState(1);
 
@@ -22,7 +22,7 @@ const Create = () => {
     description: "",
     palette: colors[0].name,
     design: logoDesigns[0].title,
-    idea: "",
+    pricing: "",
   });
 
   const onInputChange = useCallback((field: string, value: string) => {
@@ -51,6 +51,7 @@ const Create = () => {
         onInputChange={onInputChange}
         inputValue={formData.design}
       />,
+      <PricingModel key="pricing" onInputChange={onInputChange} />,
     ],
     [formData, onInputChange]
   );
