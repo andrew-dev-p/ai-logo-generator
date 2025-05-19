@@ -6,6 +6,8 @@ import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { useEffect } from "react";
 import { SignInButton, useUser } from "@clerk/nextjs";
+import Link from "next/link";
+
 const PricingModel = ({
   formData,
   onInputChange,
@@ -43,19 +45,24 @@ const PricingModel = ({
             <li>Free</li>
           </ul>
           {user ? (
-            <Button
-              onClick={() => onInputChange("pricing", "free")}
-              variant="outline"
-              className="w-1/2 mt-4"
-            >
-              Choose Free
+            <Button className="w-1/2 mt-4" asChild>
+              <Link
+                href="/generate-logo?type=free"
+                onClick={() => onInputChange("pricing", "free")}
+              >
+                Choose Free
+              </Link>
             </Button>
           ) : (
             <SignInButton
               mode="modal"
               forceRedirectUrl={"/generate-logo?type=free"}
             >
-              <Button variant="outline" className="w-1/2 mt-4">
+              <Button
+                onClick={() => onInputChange("pricing", "free")}
+                variant="outline"
+                className="w-1/2 mt-4"
+              >
                 Choose Free
               </Button>
             </SignInButton>
@@ -70,11 +77,13 @@ const PricingModel = ({
             <li>Only 1 credit</li>
           </ul>
           {user ? (
-            <Button
-              onClick={() => onInputChange("pricing", "premium")}
-              className="w-1/2 mt-4"
-            >
-              Choose Premium
+            <Button className="w-1/2 mt-4" asChild>
+              <Link
+                href="/generate-logo?type=premium"
+                onClick={() => onInputChange("pricing", "premium")}
+              >
+                Choose Premium
+              </Link>
             </Button>
           ) : (
             <SignInButton
@@ -82,8 +91,9 @@ const PricingModel = ({
               forceRedirectUrl={"/generate-logo?type=premium"}
             >
               <Button
-                onClick={() => onInputChange("pricing", "premium")}
                 className="w-1/2 mt-4"
+                asChild
+                onClick={() => onInputChange("pricing", "premium")}
               >
                 Choose Premium
               </Button>
