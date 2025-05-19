@@ -1,13 +1,32 @@
+"use client";
+
 import { Smile, Sparkle } from "lucide-react";
 import HeadingDescription from "./ui/heading-description";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
-
+import { useEffect } from "react";
+import { SignInButton, useUser } from "@clerk/nextjs";
 const PricingModel = ({
+  formData,
   onInputChange,
 }: {
+  formData: {
+    title: string;
+    description: string;
+    palette: string;
+    design: string;
+    pricing: string;
+  };
   onInputChange: (field: string, value: string) => void;
 }) => {
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (formData.title && typeof window !== "undefined") {
+      localStorage.setItem("formData", JSON.stringify(formData));
+    }
+  }, [formData]);
+
   return (
     <div className="my-5">
       <HeadingDescription
@@ -23,13 +42,24 @@ const PricingModel = ({
             <li>Limited quality</li>
             <li>Free</li>
           </ul>
-          <Button
-            onClick={() => onInputChange("pricing", "free")}
-            variant="outline"
-            className="w-1/2 mt-4"
-          >
-            Choose Free
-          </Button>
+          {user ? (
+            <Button
+              onClick={() => onInputChange("pricing", "free")}
+              variant="outline"
+              className="w-1/2 mt-4"
+            >
+              Choose Free
+            </Button>
+          ) : (
+            <SignInButton
+              mode="modal"
+              forceRedirectUrl={"/generate-logo?type=free"}
+            >
+              <Button variant="outline" className="w-1/2 mt-4">
+                Choose Free
+              </Button>
+            </SignInButton>
+          )}
         </Card>
         <Card className="flex items-center gap-2">
           <Sparkle />
@@ -39,12 +69,26 @@ const PricingModel = ({
             <li>High quality</li>
             <li>Only 1 credit</li>
           </ul>
-          <Button
-            onClick={() => onInputChange("pricing", "premium")}
-            className="w-1/2 mt-4"
-          >
-            Choose Premium
-          </Button>
+          {user ? (
+            <Button
+              onClick={() => onInputChange("pricing", "premium")}
+              className="w-1/2 mt-4"
+            >
+              Choose Premium
+            </Button>
+          ) : (
+            <SignInButton
+              mode="modal"
+              forceRedirectUrl={"/generate-logo?type=premium"}
+            >
+              <Button
+                onClick={() => onInputChange("pricing", "premium")}
+                className="w-1/2 mt-4"
+              >
+                Choose Premium
+              </Button>
+            </SignInButton>
+          )}
         </Card>
       </div>
     </div>

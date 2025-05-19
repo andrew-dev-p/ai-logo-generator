@@ -51,7 +51,11 @@ const Create = () => {
         onInputChange={onInputChange}
         inputValue={formData.design}
       />,
-      <PricingModel key="pricing" onInputChange={onInputChange} />,
+      <PricingModel
+        key="pricing"
+        onInputChange={onInputChange}
+        formData={formData}
+      />,
     ],
     [formData, onInputChange]
   );

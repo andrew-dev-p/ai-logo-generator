@@ -8,7 +8,7 @@ const Hero = () => {
   const [input, setInput] = useState("");
 
   return (
-    <div className="flex items-center mt-32 flex-col gap-4">
+    <div className="flex items-center mb-16 flex-col gap-4">
       <h2 className="text-4xl font-bold">AI Logo Generator</h2>
       <p className="text-lg">Generate a logo for your business with AI.</p>
       <div className="flex items-center gap-2">
