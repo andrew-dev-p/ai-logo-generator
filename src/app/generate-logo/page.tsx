@@ -1,5 +1,12 @@
+"use client";
+
+import { UserContext } from "@/context/user-context";
+import { useContext } from "react";
+
 const GenerateLogo = () => {
-  return <div>GenerateLogo</div>;
+  const { userData } = useContext(UserContext);
+
+  return <div>{userData?.name}</div>;
 };
 
 export default GenerateLogo;
