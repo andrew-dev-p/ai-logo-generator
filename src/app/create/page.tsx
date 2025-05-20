@@ -89,7 +89,7 @@ const Create = () => {
             <ArrowRight />
           </Button>
         ) : (
-          <SignInButton mode="modal" forceRedirectUrl={"/generate-logo"}>
+          <SignInButton mode="modal" forceRedirectUrl={"/create"}>
             <Button
               className="ml-auto"
               onClick={() => {
