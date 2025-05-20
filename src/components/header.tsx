@@ -3,6 +3,7 @@
 import { Squirrel } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { UserButton, useUser } from "@clerk/nextjs";
+import Link from "next/link";
 
 const Header = () => {
   const { user } = useUser();
@@ -15,7 +16,9 @@ const Header = () => {
       </div>
       <div className="flex items-center gap-2">
         {user && <Button variant="outline">Dashboard</Button>}
-        <Button>Get Started</Button>
+        <Button asChild>
+          <Link href="/create">Get Started</Link>
+        </Button>
         <UserButton />
       </div>
     </div>

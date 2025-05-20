@@ -3,16 +3,20 @@
 import LogoTitle from "@/components/logo-title";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import LogoDescription from "@/components/logo-description";
 import LogoPalette from "@/components/logo-palette";
 import LogoDesign from "@/components/logo-design";
 import { Card } from "@/components/ui/card";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import colors from "@/lib/colors";
 import logoDesigns from "@/lib/logo-designs";
-import PricingModel from "@/components/pricing-model";
+import { SignInButton, useUser } from "@clerk/nextjs";
+
 const Create = () => {
+  const router = useRouter();
+  const { user } = useUser();
+
   const [step, setStep] = useState(1);
 
   const title = useSearchParams().get("title") || "";
@@ -22,7 +26,6 @@ const Create = () => {
     description: "",
     palette: colors[0].name,
     design: logoDesigns[0].title,
-    pricing: "",
   });
 
   const onInputChange = useCallback((field: string, value: string) => {
@@ -51,14 +54,15 @@ const Create = () => {
         onInputChange={onInputChange}
         inputValue={formData.design}
       />,
-      <PricingModel
-        key="pricing"
-        onInputChange={onInputChange}
-        formData={formData}
-      />,
     ],
     [formData, onInputChange]
   );
+
+  useEffect(() => {
+    if (formData.title && typeof window !== "undefined") {
+      localStorage.setItem("formData", JSON.stringify(formData));
+    }
+  }, [formData]);
 
   return (
     <Card className="w-full px-8 py-5">
@@ -70,10 +74,37 @@ const Create = () => {
             Previous
           </Button>
         )}
-        <Button className="ml-auto" onClick={() => setStep(step + 1)}>
-          Next
-          <ArrowRight />
-        </Button>
+        {user ? (
+          <Button
+            className="ml-auto"
+            onClick={() => {
+              if (step === stepComponents.length) {
+                router.push(`/generate-logo`);
+              } else {
+                setStep(step + 1);
+              }
+            }}
+          >
+            Next
+            <ArrowRight />
+          </Button>
+        ) : (
+          <SignInButton mode="modal" forceRedirectUrl={"/generate-logo"}>
+            <Button
+              className="ml-auto"
+              onClick={() => {
+                if (step === stepComponents.length) {
+                  router.push(`/generate-logo`);
+                } else {
+                  setStep(step + 1);
+                }
+              }}
+            >
+              Next
+              <ArrowRight />
+            </Button>
+          </SignInButton>
+        )}
       </div>
     </Card>
   );
