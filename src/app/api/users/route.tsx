@@ -22,7 +22,6 @@ export async function POST(req: Request) {
       const data = {
         name: userName,
         email: userEmail,
-        credits: 5,
       };
 
       await setDoc(doc(db, "users", userEmail), { ...data });

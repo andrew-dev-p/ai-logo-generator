@@ -6,9 +6,11 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { Loader2 } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 const GenerateLogo = () => {
   const { userData } = useContext(UserContext);
+  const { user } = useUser();
 
   const [formData, setFormData] = useState<{
     title: string;
@@ -31,6 +33,11 @@ const GenerateLogo = () => {
   }, [userData]);
 
   const generateLogo = async () => {
+    if (!user?.id) {
+      console.error("User not authenticated");
+      return;
+    }
+
     const PROMPT = prompt.LOGO_PROMPT.replace(
       "{logoTitle}",
       formData?.title || ""
@@ -40,7 +47,10 @@ const GenerateLogo = () => {
       .replace("{logoDesign}", formData?.design || "")
       .replace("{logoPrompt}", formData?.prompt || "");
 
-    const response = await axios.post("/api/logos", { prompt: PROMPT });
+    const response = await axios.post("/api/logos", {
+      prompt: PROMPT,
+      userId: user.id,
+    });
     setGeneratedImage(response.data.generatedImage);
   };
 
