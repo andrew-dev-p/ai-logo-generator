@@ -15,7 +15,11 @@ const Header = () => {
         <h1 className="text-2xl font-bold">AI Logo Generator</h1>
       </div>
       <div className="flex items-center gap-2">
-        {user && <Button variant="outline">Dashboard</Button>}
+        {user && (
+          <Button variant="outline" asChild>
+            <Link href="/dashboard">Dashboard</Link>
+          </Button>
+        )}
         <Button asChild>
           <Link href="/create">Get Started</Link>
         </Button>
